@@ -11,10 +11,14 @@ sides = screen.textinput(
 while not sides.isdigit():
     sides = screen.textinput(
         "Polygon", 
-        f"Ви ввели '{sides}'. Це не число!\nВведіть кількість сторін багатокутника знову: "
+        f"Ви ввели '{sides}'. Це не число!\n"
+        f"Введіть кількість сторін багатокутника знову: "
     )
 
-length = screen.textinput("Polygon", "Введіть довжину сторони багатокутника: ")
+length = screen.textinput(
+    "Polygon", 
+    "Введіть довжину сторони багатокутника: "
+)
 
 while True:
     if length is None:
@@ -25,7 +29,8 @@ while True:
     else:
         length = screen.textinput(
             "Polygon",
-            f"Ви ввели '{length}'. Це не число!\nВведіть довжину сторони багатокутника знову: "
+            f"Ви ввели '{length}'. Це не число!\n"
+            f"Введіть довжину сторони багатокутника знову: "
         )
 
 sides = int(sides)
