@@ -9,9 +9,11 @@ t.penup()
 
 colors = ["red", "blue", "green", "yellow", "purple"]
 
-for i in range(5):
-    t.color(colors[i])
-    t.goto(i * 20 * size, 0)
+i = 0
+for color in colors:
+    t.color(color)
+    t.goto(size * 20 * i, 0)
     t.stamp()
+    i += 1
 
 turtle.done()
