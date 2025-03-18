@@ -2,6 +2,7 @@ import turtle
 import random
 
 t = turtle.Turtle()
+t.speed(0)
 
 t.goto(100, 200)
 t.setx(200)
@@ -10,12 +11,10 @@ t.sety(100)
 screen = t.getscreen()
 width = screen.window_width()
 height = screen.window_height()
+
 colors = ["red", "green", "blue", "yellow"]
 
-t.speed(0)
-colors = ["red", "green", "blue", "yellow"]
-
-for _ in range(200):
+for _ in range(500):
     t.color(random.choice(colors))
     t.forward(random.randint(20, 50))
     t.right(random.randint(0, 360))
