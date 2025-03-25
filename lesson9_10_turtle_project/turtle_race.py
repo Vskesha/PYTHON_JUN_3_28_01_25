@@ -1,3 +1,10 @@
+import turtle
+
+# Настройки програми
+
+
+screen = turtle.Screen()
+
 screen = turtle.Screen()
 
 
