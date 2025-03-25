@@ -1,4 +1,5 @@
 import turtle
+import random
 
 # Настройки програми
 fwidth = 800
@@ -32,7 +33,7 @@ def start_game(x, y):
 
     turtles = get_turtles(num_players)
 
-
+    start_race(turtles)
     
 # Функція для малювання кнопки "Почати гру"
 def draw_start_button():
@@ -109,8 +110,14 @@ def get_turtles(num_players):
 
     return turtles
     
+def start_race(turtles):
+    game_in_progress = True
+    while game_in_progress:
+        for bot in turtles:
+            bot.forward(random.randint(1, 10))
+            # Тут додати логіку перетину фінішу і закінчення циклу
 
-
+            
 # Відслідковування натискання на кнопку
 draw_start_button()
 screen.onscreenclick(start_game)
