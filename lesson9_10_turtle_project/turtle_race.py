@@ -27,6 +27,8 @@ def start_game(x, y):
     t.write("Гра розпочалася", font=("Arial", 30, "bold"), align="center")
 
     initialize_field()
+
+    num_players = get_number_of_players()
     
 # Функція для малювання кнопки "Почати гру"
 def draw_start_button():
@@ -77,6 +79,15 @@ def initialize_field():
     t.color("red")
     t.write("Finish", font=("Arial", 14, "bold"))
     t.forward(fwidth)
+
+def get_number_of_players():
+    count = screen.numinput(
+        "Кількість гравців",
+        "Введіть кількість гравців (2-8):",
+        minval=2,
+        maxval=8,
+    )
+    return int(count)
 
 # Відслідковування натискання на кнопку
 draw_start_button()
