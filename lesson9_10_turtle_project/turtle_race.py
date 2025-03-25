@@ -29,6 +29,10 @@ def start_game(x, y):
     initialize_field()
 
     num_players = get_number_of_players()
+
+    turtles = get_turtles(num_players)
+
+
     
 # Функція для малювання кнопки "Почати гру"
 def draw_start_button():
@@ -88,6 +92,24 @@ def get_number_of_players():
         maxval=8,
     )
     return int(count)
+
+def get_turtles(num_players):
+    interval = fwidth // (num_players + 1)
+    start_x = -hwidth + interval
+
+    turtles = []
+    for i in range(num_players):
+        bot = turtle.Turtle()
+        bot.color(colors[i])
+        bot.shape("turtle")
+        bot.penup()
+        bot.goto(start_x + interval * i, start)
+        bot.setheading(90)
+        turtles.append(bot)
+
+    return turtles
+    
+
 
 # Відслідковування натискання на кнопку
 draw_start_button()
