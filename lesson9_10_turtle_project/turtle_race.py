@@ -20,6 +20,10 @@ screen.title("Черепаші перегони")
 screen.bgcolor("lightblue")
 screen.setup(width=fwidth + border * 2, height=fheight + border * 2)
 
+status_pen = turtle.Turtle()
+status_pen.penup()
+status_pen.hideturtle()
+status_pen.goto(0, finish + border // 2)
 
 # Функція для початку гри
 def start_game(x, y):
@@ -121,6 +125,8 @@ def start_race():
                 winner = bot
                 break
 
+        update_status()
+
     winner_color = winner.color()[0]
     winner.goto(0, 0)
     winner.write(
@@ -131,6 +137,26 @@ def start_race():
     winner.shapesize(3)
     winner.goto(0, -60)
     
+    status_pen.clear()
+    
+def update_status():
+    leading_turtle = turtles[0]
+    for turtle in turtles:
+        if turtle.ycor() > leading_turtle.ycor():
+            leading_turtle = turtle
+    
+    leader_color = leading_turtle.color()[0]
+    
+    distance_to_finish = finish - leading_turtle.ycor()
+    if distance_to_finish < 0:
+        distance_to_finish = 0
+    
+    status_pen.clear()
+    status_pen.write(
+        f"Лідирує: {leader_color:<10} Дистанція до фінішу: {int(distance_to_finish):>4}",
+        align="center",
+        font=("Arial", 16, "bold")
+    )
 
 # Відслідковування натискання на кнопку
 draw_start_button()
