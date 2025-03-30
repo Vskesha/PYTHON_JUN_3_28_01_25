@@ -1,3 +1,4 @@
+import time
 import turtle
 import random
 
@@ -5,8 +6,10 @@ import random
 fwidth = 800
 fheight = 600
 border = 20
-colors = ["red", "blue", "green", "black", "yellow", "orange", "purple", "brown"]
+colors = ["red", "blue", "green", "gray", "yellow", "orange", "purple", "brown"]
 turtles = []
+number_of_obstacles = 30
+obstacles = []
 #--------------------------------------------------------------------------------
 hwidth = fwidth // 2
 hheight = fheight // 2
@@ -33,6 +36,8 @@ def start_game(x, y):
     t.write("Гра розпочалася", font=("Arial", 30, "bold"), align="center")
 
     initialize_field()
+
+    generate_obstacles()
 
     num_players = get_number_of_players()
 
@@ -116,9 +121,22 @@ def get_turtles(num_players):
         turtles.append(bot)
 
 def start_race():
+    turtle.tracer(0)
     game_in_progres = True
     while game_in_progres:
         for bot in turtles:
+
+            direction = 90
+            for obs in obstacles:
+                if bot.distance(obs) < 20:
+                    if bot.xcor() < obs.xcor():
+                        direction = 145
+                    else:
+                        direction = 45
+                    break
+
+            bot.setheading(direction)
+
             bot.forward(random.randint(1, 10))
             if bot.ycor() >= finish:
                 game_in_progres = False
@@ -126,6 +144,8 @@ def start_race():
                 break
 
         update_status()
+        turtle.update()
+        time.sleep(0.15)
 
     winner_color = winner.color()[0]
     winner.goto(0, 0)
@@ -157,6 +177,18 @@ def update_status():
         align="center",
         font=("Arial", 16, "bold")
     )
+
+def generate_obstacles():
+    for _ in range(number_of_obstacles):
+        x = random.randint(-hwidth + border, hwidth - border)
+        y = random.randint(start + border, finish - border)
+        obs = turtle.Turtle()
+        obs.speed(0)
+        obs.shape("circle")
+        obs.color("black")
+        obs.penup()
+        obs.goto(x, y)
+        obstacles.append(obs)
 
 # Відслідковування натискання на кнопку
 draw_start_button()
