@@ -204,3 +204,9 @@ screen.onscreenclick(start_game)
 
 
 turtle.done()
+
+# Команди для перетворення в .exe файл
+# pip install pyinstaller
+
+# Для Windows: pyinstaller --onefile --windowed --icon=turtle2.ico turtle_race.py
+# Для macOS: pyinstaller --onefile --windowed --icon=turtle2.icns turtle_race.py
