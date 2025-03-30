@@ -10,6 +10,9 @@ colors = ["red", "blue", "green", "gray", "yellow", "orange", "purple", "brown"]
 turtles = []
 number_of_obstacles = 40
 obstacles = []
+number_of_boosts = 30
+boosts_color = "lightgreen"
+boosts = []
 #--------------------------------------------------------------------------------
 hwidth = fwidth // 2
 hheight = fheight // 2
@@ -38,6 +41,8 @@ def start_game(x, y):
     initialize_field()
 
     generate_obstacles()
+
+    generate_boosts()
 
     num_players = get_number_of_players()
 
@@ -133,6 +138,11 @@ def start_race(x, y):
     while game_in_progres:
         for bot in turtles:
 
+            for boost in boosts:
+                if bot.distance(boost) < 20:
+                    bot.setheading(90)
+                    bot.forward(random.randint(30, 50))
+
             direction = 90
             for obs in obstacles:
                 if bot.distance(obs) < 20:
@@ -197,6 +207,18 @@ def generate_obstacles():
         obs.penup()
         obs.goto(x, y)
         obstacles.append(obs)
+
+def generate_boosts():
+    for _ in range(number_of_boosts):
+        x = random.randint(-hwidth + border, hwidth - border)
+        y = random.randint(start + border, finish - border)
+        boost = turtle.Turtle()
+        boost.speed(0)
+        boost.shape("circle")
+        boost.color(boosts_color)
+        boost.penup()
+        boost.goto(x, y)
+        boosts.append(boost)
 
 # Відслідковування натискання на кнопку
 draw_start_button()
