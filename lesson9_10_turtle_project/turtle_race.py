@@ -6,6 +6,7 @@ fwidth = 800
 fheight = 600
 border = 20
 colors = ["red", "blue", "green", "black", "yellow", "orange", "purple", "brown"]
+turtles = []
 #--------------------------------------------------------------------------------
 hwidth = fwidth // 2
 hheight = fheight // 2
@@ -22,18 +23,15 @@ screen.setup(width=fwidth + border * 2, height=fheight + border * 2)
 
 # Функція для початку гри
 def start_game(x, y):
-    screen.clear()
-    t = turtle.Turtle()
-    t.hideturtle()
-    t.write("Гра розпочалася", font=("Arial", 30, "bold"), align="center")
+    screen.onscreenclick(None)
 
     initialize_field()
 
     num_players = get_number_of_players()
 
-    turtles = get_turtles(num_players)
+    generate_turtles(num_players)
 
-    start_race(turtles)
+    screen.onscreenclick(start_race)
     
 # Функція для малювання кнопки "Почати гру"
 def draw_start_button():
@@ -41,7 +39,7 @@ def draw_start_button():
     h = 50
     t = turtle.Turtle()
     t.penup()
-    t.goto(-w // 2, 0)
+    t.goto(-w // 2, h)
     t.pendown()
     t.color("black", "green")
     t.begin_fill()
@@ -94,11 +92,11 @@ def get_number_of_players():
     )
     return int(count)
 
-def get_turtles(num_players):
+def generate_turtles(num_players):
+    turtles.clear()
     interval = fwidth // (num_players + 1)
     start_x = -hwidth + interval
 
-    turtles = []
     for i in range(num_players):
         bot = turtle.Turtle()
         bot.color(colors[i])
@@ -107,10 +105,9 @@ def get_turtles(num_players):
         bot.goto(start_x + interval * i, start)
         bot.setheading(90)
         turtles.append(bot)
-
-    return turtles
     
-def start_race(turtles):
+def start_race(x, y):
+    screen.onscreenclick(None)
     game_in_progress = True
     while game_in_progress:
         for bot in turtles:
