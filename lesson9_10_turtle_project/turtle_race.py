@@ -6,7 +6,8 @@ import random
 fwidth = 800
 fheight = 600
 border = 20
-speed = 10
+speed = 1
+step = 15
 delay = 1 / (5 + speed)
 colors = ["red", "blue", "green", "gray", "yellow", "orange", "purple", "brown"]
 turtles = []
@@ -27,6 +28,11 @@ screen = turtle.Screen()
 screen.title("Черепаші перегони")
 screen.bgcolor("lightblue")
 screen.setup(width=fwidth + border * 2, height=fheight + border * 2)
+
+player = turtle.Turtle()
+player.shape("turtle")
+player.penup()
+player.speed(1)
 
 status_pen = turtle.Turtle()
 status_pen.penup()
@@ -53,12 +59,13 @@ def start_game(x, y):
 
     status_pen.clear()
     status_pen.write(
-        "Клікни мишкою, щоб почати гонку черепах",
+        f"Використовуй стрілки для переміщення черепахи",
         align="center",
         font=("Arial", 16, "bold"),
     )
 
-    screen.onscreenclick(start_race)
+    turtle.onkey(start_race, "Up")
+    turtle.listen()
 
 # Функція для малювання кнопки "Почати гру"
 def draw_start_button():
@@ -135,9 +142,16 @@ def get_turtles(num_players):
         bot.goto(start_x + interval * i, start)
         bot.setheading(90)
         turtles.append(bot)
+    
+    global player
+    player = turtles[-1]
 
-def start_race(x, y):
-    screen.onscreenclick(None)
+def start_race():
+    turtle.onkey(None, "Up")
+    turtle.onkey(move_left, "Left")
+    turtle.onkey(move_right, "Right")
+    turtle.onkey(move_up, "Up")
+    turtle.onkey(move_down, "Down")
     turtle.tracer(0)
     game_in_progres = True
     while game_in_progres:
@@ -148,19 +162,25 @@ def start_race(x, y):
                     bot.setheading(90)
                     bot.forward(random.randint(30, 50))
 
-            direction = 90
-            for obs in obstacles:
-                if bot.distance(obs) < 20:
-                    if bot.xcor() < obs.xcor():
-                        direction = 145
-                    else:
-                        direction = 45
-                    break
+            if bot != player:
+                direction = 90
+                for obs in obstacles:
+                    if bot.distance(obs) < 20:
+                        if bot.xcor() < obs.xcor():
+                            direction = 145
+                        else:
+                            direction = 45
+                        break
 
-            bot.setheading(direction)
+                bot.setheading(direction)
 
-            bot.forward(random.randint(1, 10))
+                bot.forward(random.randint(1, 10))
+
             if bot.ycor() >= finish:
+                turtle.onkey(None, "Left")
+                turtle.onkey(None, "Right")
+                turtle.onkey(None, "Up")
+                turtle.onkey(None, "Down")
                 game_in_progres = False
                 winner = bot
                 break
@@ -232,12 +252,56 @@ def generate_boosts():
         boost.goto(x, y)
         boosts.append(boost)
 
+def can_move_to(x, y):
+    for obs in obstacles:
+        if obs.distance(x, y) < step:
+            return False
+    return True
+
+def move_left():
+    x = player.xcor()
+    y = player.ycor()
+    x -= step
+    if x < -hwidth:
+        return
+    if can_move_to(x, y):
+        player.setheading(180)
+        player.goto(x, y)
+
+def move_right():
+    x = player.xcor()
+    y = player.ycor()
+    x += step
+    if x > hwidth:
+        return
+    if can_move_to(x, y):
+        player.setheading(0)
+        player.goto(x, y)
+
+def move_up():
+    x = player.xcor()
+    y = player.ycor()
+    y += step
+    if can_move_to(x, y):
+        player.setheading(90)
+        player.goto(x, y)
+
+def move_down():
+    x = player.xcor()
+    y = player.ycor()
+    y -= step
+    if y < start:
+        return
+    if can_move_to(x, y):
+        player.setheading(270)
+        player.goto(x, y)
+
 # Відслідковування натискання на кнопку
 draw_start_button()
 screen.onscreenclick(start_game)
 
 
-turtle.done()
+screen.mainloop()
 
 # Команди для перетворення в .exe файл
 # pip install pyinstaller
