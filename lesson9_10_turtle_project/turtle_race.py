@@ -61,6 +61,7 @@ def draw_start_button():
 def initialize_field():
     screen.clear()
     t = turtle.Turtle()
+    t.speed(5)
     t.penup()
     t.goto(-hwidth, -hheight)
     t.pendown()
@@ -85,6 +86,8 @@ def initialize_field():
     t.color("red")
     t.write("Finish", font=("Arial", 14, "bold"))
     t.forward(fwidth)
+
+    t.hideturtle()
 
 def get_number_of_players():
     count = screen.numinput(
@@ -113,8 +116,21 @@ def start_race():
     while game_in_progres:
         for bot in turtles:
             bot.forward(random.randint(1, 10))
-            # Тут додати логіку перетину фінішу і закінчення циклу
+            if bot.ycor() >= finish:
+                game_in_progres = False
+                winner = bot
+                break
 
+    winner_color = winner.color()[0]
+    winner.goto(0, 0)
+    winner.write(
+        f"Переможець: {winner_color}", 
+        font=("Arial", 25, "bold"), 
+        align="center"
+    )
+    winner.shapesize(3)
+    winner.goto(0, -60)
+    
 
 # Відслідковування натискання на кнопку
 draw_start_button()
