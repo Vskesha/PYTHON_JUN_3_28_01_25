@@ -6,6 +6,7 @@ fwidth = 800
 fheight = 600
 border = 20
 colors = ["red", "blue", "green", "black", "yellow", "orange", "purple", "brown"]
+turtles = []
 #--------------------------------------------------------------------------------
 hwidth = fwidth // 2
 hheight = fheight // 2
@@ -31,7 +32,7 @@ def start_game(x, y):
 
     num_players = get_number_of_players()
 
-    turtles = get_turtles(num_players)
+    get_turtles(num_players)
 
     start_race(turtles)
     
@@ -98,7 +99,6 @@ def get_turtles(num_players):
     interval = fwidth // (num_players + 1)
     start_x = -hwidth + interval
 
-    turtles = []
     for i in range(num_players):
         bot = turtle.Turtle()
         bot.color(colors[i])
@@ -107,8 +107,6 @@ def get_turtles(num_players):
         bot.goto(start_x + interval * i, start)
         bot.setheading(90)
         turtles.append(bot)
-
-    return turtles
     
 def start_race(turtles):
     game_in_progress = True
