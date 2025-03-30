@@ -6,6 +6,8 @@ import random
 fwidth = 800
 fheight = 600
 border = 20
+speed = 10
+delay = 1 / (5 + speed)
 colors = ["red", "blue", "green", "gray", "yellow", "orange", "purple", "brown"]
 turtles = []
 number_of_obstacles = 40
@@ -33,6 +35,7 @@ status_pen.goto(0, finish + border // 2)
 
 # Функція для початку гри
 def start_game(x, y):
+    screen.onscreenclick(None)
     screen.clear()
     t = turtle.Turtle()
     t.hideturtle()
@@ -63,7 +66,7 @@ def draw_start_button():
     h = 50
     t = turtle.Turtle()
     t.penup()
-    t.goto(-w // 2, 0)
+    t.goto(-w // 2, h)
     t.pendown()
     t.color("black", "green")
     t.begin_fill()
@@ -120,6 +123,7 @@ def get_number_of_players():
     return int(count)
 
 def get_turtles(num_players):
+    turtles.clear()
     interval = fwidth // (num_players + 1)
     start_x = -hwidth + interval
 
@@ -133,6 +137,7 @@ def get_turtles(num_players):
         turtles.append(bot)
 
 def start_race(x, y):
+    screen.onscreenclick(None)
     turtle.tracer(0)
     game_in_progres = True
     while game_in_progres:
@@ -162,7 +167,7 @@ def start_race(x, y):
 
         update_status()
         turtle.update()
-        time.sleep(0.15)
+        time.sleep(delay)
 
     turtle.tracer(1)
     winner_color = winner.color()[0]
@@ -176,7 +181,11 @@ def start_race(x, y):
     winner.goto(0, -60)
     
     status_pen.clear()
-    
+
+    time.sleep(2)
+    draw_start_button()
+    screen.onscreenclick(start_game)
+
 def update_status():
     leading_turtle = turtles[0]
     for turtle in turtles:
@@ -190,6 +199,7 @@ def update_status():
         distance_to_finish = 0
     
     status_pen.clear()
+    status_pen.color(leader_color)
     status_pen.write(
         f"Лідирує: {leader_color:<10} Дистанція до фінішу: {int(distance_to_finish):>4}",
         align="center",
@@ -197,6 +207,7 @@ def update_status():
     )
 
 def generate_obstacles():
+    obstacles.clear()
     for _ in range(number_of_obstacles):
         x = random.randint(-hwidth + border, hwidth - border)
         y = random.randint(start + border, finish - border)
@@ -209,6 +220,7 @@ def generate_obstacles():
         obstacles.append(obs)
 
 def generate_boosts():
+    boosts.clear()
     for _ in range(number_of_boosts):
         x = random.randint(-hwidth + border, hwidth - border)
         y = random.randint(start + border, finish - border)
