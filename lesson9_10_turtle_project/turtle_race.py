@@ -8,7 +8,7 @@ fheight = 600
 border = 20
 colors = ["red", "blue", "green", "gray", "yellow", "orange", "purple", "brown"]
 turtles = []
-number_of_obstacles = 30
+number_of_obstacles = 40
 obstacles = []
 #--------------------------------------------------------------------------------
 hwidth = fwidth // 2
@@ -43,7 +43,14 @@ def start_game(x, y):
 
     get_turtles(num_players)
 
-    start_race()
+    status_pen.clear()
+    status_pen.write(
+        "Клікни мишкою, щоб почати гонку черепах",
+        align="center",
+        font=("Arial", 16, "bold"),
+    )
+
+    screen.onscreenclick(start_race)
 
 # Функція для малювання кнопки "Почати гру"
 def draw_start_button():
@@ -120,7 +127,7 @@ def get_turtles(num_players):
         bot.setheading(90)
         turtles.append(bot)
 
-def start_race():
+def start_race(x, y):
     turtle.tracer(0)
     game_in_progres = True
     while game_in_progres:
@@ -147,6 +154,7 @@ def start_race():
         turtle.update()
         time.sleep(0.15)
 
+    turtle.tracer(1)
     winner_color = winner.color()[0]
     winner.goto(0, 0)
     winner.write(
