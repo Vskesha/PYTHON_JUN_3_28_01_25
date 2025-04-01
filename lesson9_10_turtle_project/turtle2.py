@@ -1,7 +1,10 @@
 import turtle
 import random
+import time
 
 # Настройки програми
+speed = 20
+delay = 1 / (5 + speed)
 fwidth = 800
 fheight = 600
 border = 20
@@ -119,6 +122,7 @@ def generate_turtles(num_players):
         turtles.append(bot)
     
 def start_race(x, y):
+    turtle.tracer(0)
     screen.onscreenclick(None)
     game_in_progress = True
     while game_in_progress:
@@ -139,6 +143,8 @@ def start_race(x, y):
                 declare_winner(bot)
                 break
         update_status()
+        turtle.update()
+        time.sleep(delay)
 
 def declare_winner(winner):
     winner.penup()
