@@ -6,8 +6,10 @@ fwidth = 800
 fheight = 600
 border = 20
 max_move = 10
-colors = ["red", "blue", "green", "black", "yellow", "orange", "purple", "brown"]
+number_of_obstacles = 35
+colors = ["red", "blue", "green", "gray", "yellow", "orange", "purple", "brown"]
 turtles = []
+obstacles = []
 #--------------------------------------------------------------------------------
 hwidth = fwidth // 2
 hheight = fheight // 2
@@ -31,6 +33,8 @@ def start_game(x, y):
     screen.onscreenclick(None)
 
     initialize_field()
+
+    generate_obstacles()
 
     num_players = get_number_of_players()
 
@@ -111,6 +115,7 @@ def generate_turtles(num_players):
         bot.penup()
         bot.goto(start_x + interval * i, start)
         bot.setheading(90)
+        bot.pendown()
         turtles.append(bot)
     
 def start_race(x, y):
@@ -118,6 +123,16 @@ def start_race(x, y):
     game_in_progress = True
     while game_in_progress:
         for bot in turtles:
+            direction = 90
+            for obs in obstacles:
+                if bot.distance(obs) < 20:
+                    if bot.xcor() < obs.xcor():
+                        direction = 145
+                    else:
+                        direction = 45
+                    break
+            bot.setheading(direction)
+
             bot.forward(random.randint(1, max_move))
             if bot.ycor() >= finish:
                 game_in_progress = False
@@ -126,6 +141,7 @@ def start_race(x, y):
         update_status()
 
 def declare_winner(winner):
+    winner.penup()
     winner.goto(0, 0)
     winner.write(
         f"Переможець {winner.color()[0]}",
@@ -151,6 +167,19 @@ def update_status():
         align="center",
         font=("Arial", 16, "bold"),
     )
+
+def generate_obstacles():
+    obstacles.clear()
+    for _ in range(number_of_obstacles):
+        x = random.randint(-hwidth, hwidth)
+        y = random.randint(start + border, finish - border)
+        obs = turtle.Turtle()
+        obs.speed(0)
+        obs.shape("circle")
+        obs.color("black")
+        obs.penup()
+        obs.goto(x, y)
+        obstacles.append(obs)
 
 
 # Відслідковування натискання на кнопку
