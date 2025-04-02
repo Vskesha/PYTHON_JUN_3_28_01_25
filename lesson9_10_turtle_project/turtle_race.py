@@ -10,9 +10,12 @@ fheight = 600
 border = 20
 max_move = 10
 number_of_obstacles = 35
+number_of_boosts = 30
+boosts_color = "lightgreen"
 colors = ["red", "blue", "green", "gray", "yellow", "orange", "purple", "brown"]
 turtles = []
 obstacles = []
+boosts = []
 #--------------------------------------------------------------------------------
 hwidth = fwidth // 2
 hheight = fheight // 2
@@ -38,6 +41,8 @@ def start_game(x, y):
     initialize_field()
 
     generate_obstacles()
+
+    generate_boosts()
 
     num_players = get_number_of_players()
 
@@ -128,6 +133,14 @@ def start_race():
     game_in_progress = True
     while game_in_progress:
         for bot in turtles:
+
+            for boost in boosts:
+                if bot.distance(boost) < 20:
+                    bot.setheading(90)
+                    bot.pensize(5)
+                    bot.forward(random.randint(40, 60))
+                    bot.pensize(1)
+
             direction = 90
             for obs in obstacles:
                 if bot.distance(obs) < 20:
@@ -190,6 +203,18 @@ def generate_obstacles():
         obs.goto(x, y)
         obstacles.append(obs)
 
+def generate_boosts():
+    boosts.clear()
+    for _ in range(number_of_boosts):
+        x = random.randint(-hwidth + border, hwidth - border)
+        y = random.randint(start + border, finish - border)
+        boost = turtle.Turtle()
+        boost.speed(0)
+        boost.shape("square")
+        boost.color(boosts_color)
+        boost.penup()
+        boost.goto(x, y)
+        boosts.append(boost)
 
 # Відслідковування натискання на кнопку
 draw_start_button()
@@ -198,7 +223,7 @@ screen.onscreenclick(start_game)
 
 turtle.done()
 
-# команди
+# команди для створення EXE-файлу
 # 
 # pip install pyinstaller
 
