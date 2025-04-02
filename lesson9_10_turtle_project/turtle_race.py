@@ -57,6 +57,8 @@ def start_game(x, y):
         font=("Arial", 16, "bold")
     )
 
+    countdown()
+
     start_race()
     
 # Функція для малювання кнопки "Почати гру"
@@ -187,6 +189,10 @@ def start_race():
 
     status_pen.clear()
 
+    time.sleep(2)
+    draw_start_button()
+    screen.onscreenclick(start_game)
+
 def declare_winner(winner):
     winner.penup()
     winner.goto(0, 0)
@@ -282,6 +288,23 @@ def move_down():
     if can_move_to(x, y):
         player.setheading(270)
         player.goto(x, y)
+
+def countdown():
+    pen = turtle.Turtle()
+    pen.penup()
+    pen.hideturtle()
+    pen.goto(0, -hheight // 2)
+
+    for i in range(3, 0, -1):
+        pen.color(colors[i])
+        pen.write(i, align="center", font=("Arial", hheight, "bold"))
+        time.sleep(1.5)
+        pen.clear()
+
+    pen.color(colors[0])
+    pen.write("Start", align="center", font=("Arial", hheight // 2, "bold"))
+    time.sleep(1)
+    pen.clear()
 
 
 # Відслідковування натискання на кнопку
