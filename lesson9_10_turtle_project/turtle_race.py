@@ -12,6 +12,7 @@ max_move = 10
 number_of_obstacles = 35
 number_of_boosts = 30
 player_step = 15
+player_position = -1
 boosts_color = "lightgreen"
 colors = ["red", "blue", "green", "gray", "yellow", "orange", "purple", "brown"]
 turtles = []
@@ -56,6 +57,8 @@ def start_game(x, y):
         align="center",
         font=("Arial", 16, "bold")
     )
+
+    choose_turtle(num_players)
 
     set_speed()
 
@@ -143,7 +146,7 @@ def generate_turtles(num_players):
 def start_race():
 
     global player
-    player = turtles[-1]
+    player = turtles[player_position]
 
     turtle.listen()
     turtle.onkey(move_left, "Left")
@@ -190,6 +193,7 @@ def start_race():
         time.sleep(delay)
 
     status_pen.clear()
+    turtle.update()
 
     time.sleep(2)
     draw_start_button()
@@ -317,6 +321,18 @@ def set_speed():
         maxval=20,
     )
     delay = 1 / (5 + user_speed)
+
+def choose_turtle(num_players):
+    global player_position
+
+    position = screen.numinput(
+        "Вибір черепахи",
+        f"Введи номер черепахи (1 - {num_players}):",
+        minval=1,
+        maxval=num_players,
+    )
+
+    player_position = int(position) - 1
 
 # Відслідковування натискання на кнопку
 draw_start_button()
