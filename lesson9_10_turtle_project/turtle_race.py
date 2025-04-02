@@ -11,6 +11,7 @@ border = 20
 max_move = 10
 number_of_obstacles = 35
 number_of_boosts = 30
+player_step = 15
 boosts_color = "lightgreen"
 colors = ["red", "blue", "green", "gray", "yellow", "orange", "purple", "brown"]
 turtles = []
@@ -28,6 +29,8 @@ screen = turtle.Screen()
 screen.title("Черепаші перегони")
 screen.bgcolor("lightblue")
 screen.setup(width=fwidth + border * 2, height=fheight + border * 2)
+
+player = turtle.Turtle()
 
 status_pen = turtle.Turtle()
 status_pen.penup()
@@ -47,6 +50,12 @@ def start_game(x, y):
     num_players = get_number_of_players()
 
     generate_turtles(num_players)
+
+    status_pen.write(
+        "Використовуй стрілки для переміщення черепахи",
+        align="center",
+        font=("Arial", 16, "bold")
+    )
 
     start_race()
     
@@ -128,6 +137,16 @@ def generate_turtles(num_players):
         turtles.append(bot)
     
 def start_race():
+
+    global player
+    player = turtles[-1]
+
+    turtle.listen()
+    turtle.onkey(move_left, "Left")
+    turtle.onkey(move_right, "Right")
+    turtle.onkey(move_up, "Up")
+    turtle.onkey(move_down, "Down")
+
     turtle.tracer(0)
     screen.onscreenclick(None)
     game_in_progress = True
@@ -141,18 +160,24 @@ def start_race():
                     bot.forward(random.randint(40, 60))
                     bot.pensize(1)
 
-            direction = 90
-            for obs in obstacles:
-                if bot.distance(obs) < 20:
-                    if bot.xcor() < obs.xcor():
-                        direction = 145
-                    else:
-                        direction = 45
-                    break
-            bot.setheading(direction)
+            if bot != player:
+                direction = 90
+                for obs in obstacles:
+                    if bot.distance(obs) < 20:
+                        if bot.xcor() < obs.xcor():
+                            direction = 145
+                        else:
+                            direction = 45
+                        break
+                bot.setheading(direction)
 
-            bot.forward(random.randint(1, max_move))
+                bot.forward(random.randint(1, max_move))
+
             if bot.ycor() >= finish:
+                turtle.onkey(None, "Left")
+                turtle.onkey(None, "Right")
+                turtle.onkey(None, "Up")
+                turtle.onkey(None, "Down")
                 game_in_progress = False
                 declare_winner(bot)
                 break
@@ -215,6 +240,49 @@ def generate_boosts():
         boost.penup()
         boost.goto(x, y)
         boosts.append(boost)
+
+def can_move_to(x, y):
+    if x < -hwidth or x > hwidth or y < start:
+        return False
+    
+    for obs in obstacles:
+        if obs.distance(x, y) < player_step:
+            return False
+    
+    return True
+
+def move_left():
+    x = player.xcor()
+    y = player.ycor()
+    x -= player_step
+    if can_move_to(x, y):
+        player.setheading(180)
+        player.goto(x, y)
+
+def move_right():
+    x = player.xcor()
+    y = player.ycor()
+    x += player_step
+    if can_move_to(x, y):
+        player.setheading(0)
+        player.goto(x, y)
+
+def move_up():
+    x = player.xcor()
+    y = player.ycor()
+    y += player_step
+    if can_move_to(x, y):
+        player.setheading(90)
+        player.goto(x, y)
+
+def move_down():
+    x = player.xcor()
+    y = player.ycor()
+    y -= player_step
+    if can_move_to(x, y):
+        player.setheading(270)
+        player.goto(x, y)
+
 
 # Відслідковування натискання на кнопку
 draw_start_button()
