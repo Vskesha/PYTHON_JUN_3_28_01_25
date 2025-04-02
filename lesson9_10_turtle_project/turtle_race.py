@@ -57,6 +57,8 @@ def start_game(x, y):
         font=("Arial", 16, "bold")
     )
 
+    set_speed()
+
     countdown()
 
     start_race()
@@ -306,6 +308,15 @@ def countdown():
     time.sleep(1)
     pen.clear()
 
+def set_speed():
+    global delay
+    user_speed = screen.numinput(
+        "Встановлення швидкості",
+        "Вибери швидкість (1 - 20)",
+        minval=1,
+        maxval=20,
+    )
+    delay = 1 / (5 + user_speed)
 
 # Відслідковування натискання на кнопку
 draw_start_button()
