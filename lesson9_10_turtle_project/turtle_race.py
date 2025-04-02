@@ -3,7 +3,7 @@ import random
 import time
 
 # Настройки програми
-speed = 20
+speed = 5
 delay = 1 / (5 + speed)
 fwidth = 800
 fheight = 600
@@ -43,7 +43,7 @@ def start_game(x, y):
 
     generate_turtles(num_players)
 
-    screen.onscreenclick(start_race)
+    start_race()
     
 # Функція для малювання кнопки "Почати гру"
 def draw_start_button():
@@ -115,13 +115,14 @@ def generate_turtles(num_players):
         bot = turtle.Turtle()
         bot.color(colors[i])
         bot.shape("turtle")
+        bot.speed(5)
         bot.penup()
         bot.goto(start_x + interval * i, start)
         bot.setheading(90)
         bot.pendown()
         turtles.append(bot)
     
-def start_race(x, y):
+def start_race():
     turtle.tracer(0)
     screen.onscreenclick(None)
     game_in_progress = True
@@ -145,6 +146,8 @@ def start_race(x, y):
         update_status()
         turtle.update()
         time.sleep(delay)
+
+    status_pen.clear()
 
 def declare_winner(winner):
     winner.penup()
