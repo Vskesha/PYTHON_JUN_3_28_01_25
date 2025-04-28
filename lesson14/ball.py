@@ -10,28 +10,26 @@ BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 
 # SETTINGS -----------------------------------------------
-win_width = 1024  # ширина вікна
-win_height = 768  # висота вікна
-fps = 50  # frames per second (частота відтворення кадрів)
+win_width = 1024    # ширина вікна
+win_height = 768    # висота вікна
+fps = 50            # frames per second (частота відтворення кадрів)
 
-half_width = win_width // 2
-half_height = win_height // 2
+ball_radius = 30       # радіус м'ячика
+ball_speed = 1         # стартова швидкість м'ячика
+speed_multiplier = 1   # коефіцієнт збільшення швидкості м'ячика
+max_speed = 5          # максимальна швидкість м'ячика
+gravity = 0.4          # гравітація
 
-ball_radius = 30
-ball_speed = 1
-speed_multiplier = 1  # 1.0005
-max_speed = 5
-gravity = 0.4
-
-max_circle_radius = math.sqrt(half_height ** 2 + half_width ** 2)
-circle_radius_decrease = 0.3
-circle_thickness = 3
-distance_between_circles = 40
-max_circle_rotation_speed = 0.015
-circle_gap = math.pi / 3
-circles = deque()
+circle_radius_decrease = 0.3       # зменшення радіуса кілець за кадр
+circle_thickness = 3               # товщина кілець
+distance_between_circles = 40      # відстань між кільцями
+max_circle_rotation_speed = 0.015  # максимальна швидкість повороту кілець
+circle_gap = math.pi / 3           # кут порожнини в кільці
 
 # ---------------------------------------------------------
+half_width = win_width // 2
+half_height = win_height // 2
+max_circle_radius = math.sqrt(half_height ** 2 + half_width ** 2)
 
 
 class Circle:
@@ -166,12 +164,13 @@ clock = pygame.time.Clock()
 
 ball = Ball(
     random.randint(half_width - 50, half_width + 50),
-    random.randint(1, 100),
+    random.randint(half_height - 50, half_height + 50),
     ball_radius,
     ball_speed,
     random.uniform(0, math.pi * 2)
 )
 
+circles = deque()
 cr = max_circle_radius
 for _ in range(10):
     circles.appendleft(Circle(radius=cr))
