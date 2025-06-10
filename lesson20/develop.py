@@ -10,10 +10,13 @@ folder_path = Path(__file__).parent.joinpath("images/hero")
 idle_image = pygame.image.load(folder_path.joinpath("idle.png"))
 jump_image = pygame.image.load(folder_path.joinpath("jump.png"))
 
-x, y = 300, 300
+x = 300
+y = y_start = 500
+vertical_speed = 40
 is_jumping = False
-jump_height = 0
-max_jump_height = 100
+y_speed = 0
+gravity = 4
+image = idle_image
 
 clock = pygame.time.Clock()
 fps = 30
@@ -26,20 +29,18 @@ while True:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE and not is_jumping:
                 is_jumping = True
-                jump_height = max_jump_height
+                y_speed = vertical_speed
+                image = jump_image
     
     if is_jumping:
-        y -= 5
-        jump_height -= 5
-        if jump_height <= 0:
+        y -= y_speed
+        y_speed -= gravity
+        if y >= y_start:
+            y = y_start
             is_jumping = False
-        image = jump_image
-    else:
-        if y < 300:
-            y += 5
-        image = idle_image
+            image = idle_image
 
     screen.fill((255, 255, 255))
-    screen.blit(image, (x, y))
+    screen.blit(image, (x, y - image.get_height()))
     pygame.display.flip()
     clock.tick(fps)
