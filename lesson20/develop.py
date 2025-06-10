@@ -10,12 +10,14 @@ folder_path = Path(__file__).parent.joinpath("images/hero")
 idle_image = pygame.image.load(folder_path.joinpath("idle.png"))
 jump_image = pygame.image.load(folder_path.joinpath("jump.png"))
 crouch_image = pygame.image.load(folder_path.joinpath("crouch.png"))
+attack_image = pygame.image.load(folder_path.joinpath("attack.png"))
 
 x = 300
 y = y_start = 500
 vertical_speed = 40
 is_jumping = False
 is_crouching = False
+is_attacking = False
 y_speed = 0
 gravity = 4
 image = idle_image
@@ -36,9 +38,15 @@ while True:
             elif event.key == pygame.K_DOWN and not is_jumping:
                 is_crouching = True
                 image = crouch_image
+            elif event.key == pygame.K_a and not (is_jumping or is_crouching):
+                is_attacking = True
+                image = attack_image
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_DOWN:
                 is_crouching = False
+                image = idle_image
+            elif event.key == pygame.K_a:
+                is_attacking = False
                 image = idle_image
     
     if is_jumping:
