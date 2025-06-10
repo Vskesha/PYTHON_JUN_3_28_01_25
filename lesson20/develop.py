@@ -12,8 +12,9 @@ jump_image = pygame.image.load(folder_path.joinpath("jump.png"))
 crouch_image = pygame.image.load(folder_path.joinpath("crouch.png"))
 attack_image = pygame.image.load(folder_path.joinpath("attack.png"))
 shooting_image = pygame.image.load(folder_path.joinpath("shoot.png"))
+bullet_image = pygame.image.load(folder_path.joinpath("bullet.png"))
 
-x = 300
+x = 200
 y = y_start = 500
 vertical_speed = 40
 is_jumping = False
@@ -24,6 +25,8 @@ return_to_idle = False
 y_speed = 0
 gravity = 4
 image = idle_image
+bullet_speed = 40
+bullets = []
 
 clock = pygame.time.Clock()
 fps = 30
@@ -50,6 +53,8 @@ while True:
                     image = attack_image
                     if not is_attacking:
                         return_to_idle = True
+                bullets.append([x + image.get_width(), 
+                                y - image.get_height() + 35])
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_DOWN:
                 is_crouching = False
@@ -69,6 +74,11 @@ while True:
     screen.fill((255, 255, 255))    
     screen.blit(image, (x, y - image.get_height()))
     
+    bullets = [bullet for bullet in bullets if bullet[0] < 800]
+    for bullet_position in bullets:
+        screen.blit(bullet_image, bullet_position)
+        bullet_position[0] += bullet_speed
+
     if shot_timer:
         screen.blit(
             shooting_image,
