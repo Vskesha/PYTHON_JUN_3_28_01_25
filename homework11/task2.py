@@ -1,10 +1,13 @@
-user_input = input("Введіть число: ")
+# Завдання 2. 
+# Створіть список чисел і знайдіть 
+# найбільше та найменше значення в ньому 
+# за допомогою методів max() і min().
 
-number = float(user_input)
 
-square = number ** 2
+numbers = [10, 20, 5, 8, 15]
 
-print(f"Квадрат числа: {square}")
+max_value = max(numbers)
+min_value = min(numbers)
 
-separated_digits = " ".join(user_input)
-print("Цифри розділені пробілами:", separated_digits)
+print("Найбільше значення:", max_value)
+print("Найменше значення:", min_value)

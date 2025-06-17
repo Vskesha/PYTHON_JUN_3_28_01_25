@@ -1,13 +1,28 @@
-# Завдання 1
-# Вам потрібно створити словник, де ключами будуть
-# імена ваших друзів, а значеннями — їхні телефонні
-# номери. Додайте не менше трьох друзів та їх номери,
-# а потім виведіть телефонний номер одного з них.
+"""
+Завдання 1.
+Написати програму, де комп'ютер вибирає випадкове число,
+а користувач має його вгадати. Використовуйте умовні
+оператори для відгадування числа: виводьте підказки
+"занадто велике" або "занадто мале".
+"""
 
-friends = {
-    "John Doe": "+38-067-456-7890",
-    "Jane Smith": "+38-097-654-3210",
-    "Alice Johnson": "+38-050-555-5555",
-}
+import random
 
-print(friends["Jane Smith"])
+max_number = 1_000
+random_number = random.randint(1, max_number)
+
+while True:
+    user_guess = input(f"Вгадайте число (1 - {max_number:_}): ")
+
+    if not user_guess.isdigit():
+        print("Ви ввели не число!")
+        continue
+
+    user_guess = int(user_guess)
+    if user_guess > random_number:
+        print("Занадто велике")
+    elif user_guess < random_number:
+        print("Занадто мале")
+    else:
+        print("Ви вгадали!")
+        break

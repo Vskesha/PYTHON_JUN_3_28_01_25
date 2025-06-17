@@ -1,32 +1,32 @@
 """
-Напишіть програму, яка приймає список кутів у 
-радіанах і обчислює арксинус, арккосинус та 
-арктангенс для кожного кута. Використовуйте 
-функції asin, acos та atan з бібліотеки math, 
-перетворюючи радіани в градуси за допомогою 
-функції degrees.
+Створіть просту анімацію, де синій квадрат 
+рухається зліва направо по екрану. Коли 
+квадрат досягає правого краю, він повинен 
+почати рух зліва знову.
 """
 
-import math
+import pygame
 
-def calculate_trigonometric_functions(
-        angles: list[float]
-    ) -> list[tuple[float, float, float]]:
-    """
-    Calculates sine, cosine and tangent for each 
-    angle in radians and converts them to degrees.
+pygame.init()
+screen = pygame.display.set_mode((800, 600))
 
-    Args:
-        angles (list[float]): List of angles in radians.
+running = True
+x_position = 0
 
-    Returns:
-        List of tuples containing sine, cosine 
-        and tangent values in degrees.
-    """
-    results = []
-    for angle in angles:
-        sine = math.sin(angle)
-        cosine = math.cos(angle)
-        tangent = math.tan(angle)
-        results.append((sine, cosine, tangent))
-    return results
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+    
+    screen.fill((0, 0, 0))
+
+    pygame.draw.rect(screen, (0, 0, 255), (x_position, 300, 50, 50))
+    pygame.display.flip()
+
+    x_position += 5
+    if x_position > 800:
+        x_position = 0
+
+    pygame.time.delay(20)
+
+pygame.quit()

@@ -1,6 +1,8 @@
-number1 = int(input("Введіть перше число: "))
-number2 = int(input("Введіть друге число: "))
+# Завдання 5. 
+# Напишіть код, який створює рядок і повторює 
+# його п'ять разів, використовуючи оператор 
+# множення *, та виводить результат.
 
-difference = abs(number1 - number2)
-
-print(f"Різниця між {number1} та {number2} дорівнює {difference}")
+text = "Hello, World! "
+result = text * 5
+print(result)

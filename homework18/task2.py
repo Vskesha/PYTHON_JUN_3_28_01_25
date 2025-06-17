@@ -1,50 +1,45 @@
 """
-Створіть програму, яка малює коло, яке змінює свій 
-колір кожного разу, коли ви натискаєте пробіл.
+Створіть програму, де об'єкт слідує за курсором миші.
 """
 
 import pygame
-import random
-
-width, height = 800, 600
-max_speed = 5
 
 pygame.init()
 
-screen = pygame.display.set_mode((width, height))
-pygame.display.set_caption("Анімація кольорових кругів")
+width, height = 800, 600
+BLACK = (0, 0, 0)
+GREEN = (0, 255, 0)
+speed = 5
+radius = 50
 
-radius = random.randint(30, 50)
-x = random.randint(radius, width - radius)
-y = random.randint(radius, height - radius)
-speed_x = random.randint(-max_speed, max_speed)
-speed_y = random.randint(-max_speed, max_speed)
-color = (random.randint(0, 255),
-         random.randint(0, 255),
-         random.randint(0, 255))
+screen = pygame.display.set_mode((width, height))
+pygame.display.set_caption("Переслідування курсору")
+
+x, y = width // 2, height // 2
 
 running = True
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            color = (random.randint(0, 255),
-                     random.randint(0, 255),
-                     random.randint(0, 255))
 
-    screen.fill((0, 0, 0))
+    mx, my = pygame.mouse.get_pos()
+    distance = ((mx - x) ** 2 + (my - y) ** 2) ** 0.5
+    if distance > speed:
+        x += (mx - x) / distance * speed
+        y += (my - y) / distance * speed
+        if x < radius:
+            x = radius
+        elif x > width - radius:
+            x = width - radius
+        if y < radius:
+            y = radius
+        elif y > height - radius:
+            y = height - radius
 
-    pygame.draw.circle(screen, color, (x, y), radius)
-    x += speed_x
-    y += speed_y
-
-    if x < radius or x > width - radius:
-        speed_x *= -1
-    if y < radius or y > height - radius:
-        speed_y *= -1
-    
+    screen.fill(BLACK)
+    pygame.draw.circle(screen, GREEN, (x, y), radius)
     pygame.display.flip()
-    pygame.time.delay(20)
+    pygame.time.delay(10)
 
 pygame.quit()

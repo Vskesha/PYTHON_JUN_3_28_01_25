@@ -1,6 +1,17 @@
-first_name = "John"
-last_name = "Doe"
+# Завдання 6. 
+# Створіть список з декількома елементами, 
+# зробіть його копію за допомогою методу copy(), 
+# змініть копію, та виведіть обидва списки, 
+# щоб показати, що вони різні.
 
-full_name = f"{first_name} - {last_name}"
 
-print(full_name.lower())
+original_list = [1, 2, 3, 4, 5]
+copy_list = original_list.copy()
+
+copy_list[0] = 100
+copy_list.append(6)
+
+print("Original list:", original_list)
+print("Copy list:", copy_list)
+
+# В результаті виводу на екран будуть відображені різні списки.

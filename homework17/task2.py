@@ -1,31 +1,50 @@
 """
-Додайте текст "Привіт, Pygame!" 
-у центрі вашого вікна гри. 
-Використовуйте білий колір для тексту.
+Створіть програму, яка малює коло, яке змінює свій 
+колір кожного разу, коли ви натискаєте пробіл.
 """
 
 import pygame
+import random
+
+width, height = 800, 600
+max_speed = 5
 
 pygame.init()
 
-width, height = 640, 480
 screen = pygame.display.set_mode((width, height))
-pygame.display.set_caption("Моя перша гра")
-screen.fill((255, 0, 0))
-pygame.display.flip()
+pygame.display.set_caption("Анімація кольорових кругів")
 
-font = pygame.font.Font(None, 70)
-text = font.render("Привіт, Pygame!",
-                   True,
-                   (255, 255, 255))
-text_rect = text.get_rect(center=(width // 2, height //2))
-screen.blit(text, text_rect)
-pygame.display.flip()
+radius = random.randint(30, 50)
+x = random.randint(radius, width - radius)
+y = random.randint(radius, height - radius)
+speed_x = random.randint(-max_speed, max_speed)
+speed_y = random.randint(-max_speed, max_speed)
+color = (random.randint(0, 255),
+         random.randint(0, 255),
+         random.randint(0, 255))
 
 running = True
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            color = (random.randint(0, 255),
+                     random.randint(0, 255),
+                     random.randint(0, 255))
+
+    screen.fill((0, 0, 0))
+
+    pygame.draw.circle(screen, color, (x, y), radius)
+    x += speed_x
+    y += speed_y
+
+    if x < radius or x > width - radius:
+        speed_x *= -1
+    if y < radius or y > height - radius:
+        speed_y *= -1
+    
+    pygame.display.flip()
+    pygame.time.delay(20)
 
 pygame.quit()

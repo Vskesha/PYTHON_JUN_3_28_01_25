@@ -1,55 +1,80 @@
-"""
-Завантажте зображення спрайта та зробіть так, 
-щоб спрайт рухався ліворуч при натисканні клавіші 'A', 
-праворуч при натисканні 'D', вгору при натисканні 'W' 
-та вниз при натисканні 'S'.
-"""
-
 import pygame
-from pathlib import Path
-
-width, height = 1024, 768
+import random
 
 pygame.init()
+
+WHITE = (255, 255, 255)
+BLUE = (0, 0, 255)
+RED = (255, 0, 0)
+
+width, height = 800, 600
+size = 50
+radius = 40
+interval_ms = 500
+speed = 5
+
 screen = pygame.display.set_mode((width, height))
-pygame.display.set_caption("Викориистання спрайтів")
-sprites_folder = Path(__file__).parent.joinpath("sprites")
-sprite_image_path = sprites_folder.joinpath("sonic.png")
-sprite_image = pygame.image.load(sprite_image_path)
+pygame.display.set_caption("Збір кружечків")
 
-class Player(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__()
-        self.image = sprite_image
-        self.rect = self.image.get_rect()
-        self.rect.center = (width // 2, height // 2)
+player = pygame.Rect(0, 0, size, size)
+player.center = (width // 2, height // 2)
 
-    def update(self):
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_a]:
-            self.rect.x -= 1
-        if keys[pygame.K_d]:
-            self.rect.x += 1
-        if keys[pygame.K_w]:
-            self.rect.y -= 1
-        if keys[pygame.K_s]:
-            self.rect.y += 1
+circles = []
+for _ in range(10):
+    x = random.randint(0, width - size)
+    y = random.randint(0, height - size)
+    circles.append(pygame.Rect(x, y, radius, radius))
 
+score = 0
+font = pygame.font.Font(None, 36)
 
-all_sprites = pygame.sprite.Group()
-player = Player()
-all_sprites.add(player)
+CREATE_CIRCLE = pygame.USEREVENT + 1
+pygame.time.set_timer(CREATE_CIRCLE, interval_ms)
 
 running = True
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    
-    all_sprites.update()
+        elif event.type == CREATE_CIRCLE:
+            x = random.randint(0, width - size)
+            y = random.randint(0, height - size)
+            circles.append(pygame.Rect(x, y, radius, radius))
+        
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_UP]:
+        player.y -= speed
+        if player.y < 0:
+            player.y = 0
+    if keys[pygame.K_DOWN]:
+        player.y += speed
+        if player.y > height - size:
+            player.y = height - size
+    if keys[pygame.K_LEFT]:
+        player.x -= speed
+        if player.x < 0:
+            player.x = 0
+    if keys[pygame.K_RIGHT]:
+        player.x += speed
+        if player.x > width - size:
+            player.x = width - size
 
-    screen.fill((0, 0, 0))
-    all_sprites.draw(screen)
+    for circle in circles.copy():
+        if player.colliderect(circle):
+            circles.remove(circle)
+            score += 1
+
+    screen.fill(WHITE)
+    
+    for circle in circles:
+        pygame.draw.ellipse(screen, BLUE, circle)
+
+    pygame.draw.rect(screen, RED, player)
+
+    score_text = font.render(f"Score: {score}", True, BLUE)
+    screen.blit(score_text, (10, 10))
+
     pygame.display.flip()
+    pygame.time.delay(25)    
 
 pygame.quit()

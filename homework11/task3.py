@@ -1,6 +1,12 @@
-favorite_color = "зелений"
-favorite_animal = "кіт"
+# Завдання 3. 
+# Напишіть програму, яка приймає список чисел і виводить 
+# їх у зворотному порядку за допомогою методу reverse().
 
-sentence = f"Моя улюблена тварина - {favorite_animal}, а улюблений колір - {favorite_color}"
 
-print(sentence)
+numbers = [1, 2, 3, 4, 5]
+
+# Використовуємо reverse() для зміни порядку елементів в списку
+numbers.reverse()
+
+# Виводимо змінений список
+print(numbers)

@@ -1,24 +1,59 @@
 """
-Напишіть програму, яка обчислює площу та периметр 
-правильного многокутника (n-кута), де відомі кількість 
-сторін n та довжина однієї сторони s. Використовуйте 
-формули S = (n·a²) / (4·tg(π / n)) та P = n·a.
+Додайте 5 кіл різних кольорів, які випадково 
+рухаються по екрану та відбиваються від країв.
 """
 
-import math
+import pygame
+import random
 
+width, height = 800, 600
+max_speed = 5
 
-def calculate_area_and_perimeter(n: int, a: float) -> tuple[float, float]:
-    """
-    Calculates area and perimeter of a regular polygon.
+pygame.init()
 
-    Args:
-        n (int): Number of sides.
-        a (float): Length of one side.
+screen = pygame.display.set_mode((width, height))
+pygame.display.set_caption("Анімація кольорових кругів")
 
-    Returns:
-        tuple[float, float]: Area and perimeter of the polygon.
-    """
-    area = n * a**2 / (4 * math.tan(math.pi / n))
-    perimeter = n * a
-    return area, perimeter
+circles = []
+for i in range(5):
+    radius = random.randint(30, 50)
+    circle = {"radius": radius}
+    circle["x"] = random.randint(radius, width - radius)
+    circle["y"] = random.randint(radius, height - radius)
+    circle["speed_x"] = random.randint(-max_speed, max_speed)
+    circle["speed_y"] = random.randint(-max_speed, max_speed)
+    circle["color"] = (random.randint(0, 255),
+                       random.randint(0, 255),
+                       random.randint(0, 255))
+    circles.append(circle)
+
+print(*circles, sep="\n")
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    screen.fill((0, 0, 0))
+
+    for circle in circles:
+        pygame.draw.circle(screen, 
+                           circle["color"], 
+                           (circle["x"], circle["y"]), 
+                           circle["radius"])
+        circle["x"] += circle["speed_x"]
+        circle["y"] += circle["speed_y"]
+    
+        if (circle["x"] - circle["radius"] < 0 
+                or circle["x"] + circle["radius"] > width):
+            circle["speed_x"] *= -1
+        
+        if (circle["y"] - circle["radius"] < 0 
+                or circle["y"] + circle["radius"] > height):
+            circle["speed_y"] *= -1
+    
+    pygame.display.flip()
+    pygame.time.delay(20)
+
+pygame.quit()

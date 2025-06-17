@@ -1,7 +1,8 @@
-user_input = input("Введіть число: ")
+# Завдання 1. 
+# Використовуючи метод replace(), замініть всі 
+# входження слова "старий" у рядку на слово "новий".
 
-number = float(user_input)
-
-square = number ** 2
-
-print(f"Квадрат числа: {square}")
+text = "Cтарий текст, старий текст, старий текст."
+print(text)
+new_text = text.replace("старий", "новий")
+print(new_text)

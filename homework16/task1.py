@@ -1,34 +1,22 @@
 """
-Напишіть програму, яка приймає список чисел і обчислює 
-квадратний корінь, натуральний логарифм та експоненту 
-для кожного числа. Використовуйте функції 
-sqrt, log та exp з бібліотеки math.
+Створіть вікно гри розміром 640x480 
+пікселів з червоним фоном та додайте 
+заголовок "Моя перша гра".
 """
 
-import math
+import pygame
 
-def calculate_sqrt_log_exp(
-        numbers: list[float]
-    ) -> list[tuple[float, float, float]]:
-    """
-    Calculates square root, natural logarithm and 
-    exponential for each number in the given list.
+pygame.init()
 
-    Args:
-        numbers (list[float]): List of numbers.
+screen = pygame.display.set_mode((640, 480))
+pygame.display.set_caption("Моя перша гра")
+screen.fill((255, 0, 0))
+pygame.display.flip()
 
-    Returns:
-        list: List of tuples containing calculated 
-        square root, natural logarithm, and 
-        exponential for each number.
-    """
-    result = []
-    for num in numbers:
-        if num >= 0:
-            sqrt_num = math.sqrt(num)
-            log_num = math.log(num)
-            exp_num = math.exp(num)
-            result.append((sqrt_num, log_num, exp_num))
-        else:
-            result.append(None)
-    return result
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+pygame.quit()

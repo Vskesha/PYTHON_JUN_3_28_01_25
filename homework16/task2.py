@@ -1,34 +1,31 @@
 """
-Напишіть програму, яка приймає список кутів у градусах 
-і обчислює синус, косинус та тангенс для кожного кута. 
-Використовуйте функції sin, cos та tan з бібліотеки 
-math, перетворюючи градуси в радіани за допомогою 
-функції radians.
+Додайте текст "Привіт, Pygame!" 
+у центрі вашого вікна гри. 
+Використовуйте білий колір для тексту.
 """
 
-import math
+import pygame
 
-def calculate_trigonometric_functions(
-        degrees: list[float]
-    ) -> list[tuple[float, float, float]]:
-    """
-    Calculates sine, cosine and tangent for 
-    each degree in the given list.
+pygame.init()
 
-    Args:
-        degrees (list[float]): List of degrees.
+width, height = 640, 480
+screen = pygame.display.set_mode((width, height))
+pygame.display.set_caption("Моя перша гра")
+screen.fill((255, 0, 0))
+pygame.display.flip()
 
-    Returns:
-        list[tuple[float, float, float]]: List 
-        of tuples, each containing sine, cosine 
-        and tangent for a given degree.
-    """
-    result = []
-    for degree in degrees:
-        rads = math.radians(degree)
-        sine = math.sin(rads)
-        cosine = math.cos(rads)
-        tangent = math.tan(rads)
-        result.append((sine, cosine, tangent))
-    
-    return result
+font = pygame.font.Font(None, 70)
+text = font.render("Привіт, Pygame!",
+                   True,
+                   (255, 255, 255))
+text_rect = text.get_rect(center=(width // 2, height //2))
+screen.blit(text, text_rect)
+pygame.display.flip()
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+pygame.quit()
