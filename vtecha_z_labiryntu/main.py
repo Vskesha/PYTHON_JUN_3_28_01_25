@@ -21,6 +21,10 @@ key_img = pygame.transform.scale(key_img, (cell_size, cell_size))
 door_img = pygame.image.load("assets/door.png")
 door_img = pygame.transform.scale(door_img, (cell_size, cell_size))
 
+player_img = [pygame.image.load(f"assets/player{i}.png") for i in range(1, 5)]
+player_img = [pygame.transform.scale(player, (cell_size, cell_size)) for player in player_img]
+player_id = 0
+
 maze = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1],
@@ -49,6 +53,10 @@ for y in range(height):
 
 key_position = random.choice(free_cells[1:-1])
 door_position = free_cells[-1]
+player_x, player_y = free_cells[0]
+
+clock = pygame.time.Clock()
+fps = 15
 
 running = True
 while running:
@@ -66,8 +74,11 @@ while running:
 
     screen.blit(key_img, (key_position[0] * cell_size, key_position[1] * cell_size))
     screen.blit(door_img, (door_position[0] * cell_size, door_position[1] * cell_size))
+    screen.blit(player_img[player_id], (player_x * cell_size, player_y * cell_size))
+    player_id = (player_id + 1) % len(player_img)
 
     # Оновлюємо екран
     pygame.display.flip()
+    clock.tick(fps)
 
 pygame.quit()
