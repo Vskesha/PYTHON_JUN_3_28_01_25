@@ -54,6 +54,7 @@ for y in range(height):
 key_position = random.choice(free_cells[1:-1])
 door_position = free_cells[-1]
 player_x, player_y = free_cells[0]
+key_exists = False
 
 clock = pygame.time.Clock()
 fps = 15
@@ -81,7 +82,12 @@ while running:
             if maze[y][x] == 1:
                 screen.blit(wall_img, (x * cell_size, y * cell_size))
 
-    screen.blit(key_img, (key_position[0] * cell_size, key_position[1] * cell_size))
+    if not key_exists:
+        if (player_x, player_y) == key_position:
+            key_exists = True
+        else:
+            screen.blit(key_img, (key_position[0] * cell_size, key_position[1] * cell_size))
+
     screen.blit(door_img, (door_position[0] * cell_size, door_position[1] * cell_size))
     screen.blit(player_img[player_id], (player_x * cell_size, player_y * cell_size))
     player_id = (player_id + 1) % len(player_img)
