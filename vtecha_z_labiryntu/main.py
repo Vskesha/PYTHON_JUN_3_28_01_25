@@ -63,6 +63,15 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT and player_x > 0 and maze[player_y][player_x - 1] == 0:
+                player_x -= 1
+            if event.key == pygame.K_RIGHT and player_x < width-1 and maze[player_y][player_x + 1] == 0:
+                player_x += 1
+            if event.key == pygame.K_UP and player_y > 0 and maze[player_y - 1][player_x] == 0:
+                player_y -= 1
+            if event.key == pygame.K_DOWN and player_y < height - 1 and maze[player_y + 1][player_x] == 0:
+                player_y += 1
 
     # Заповнюємо екран фоном
     screen.fill(background_color)
