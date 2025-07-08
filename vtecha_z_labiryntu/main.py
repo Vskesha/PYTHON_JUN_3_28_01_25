@@ -92,6 +92,9 @@ while running:
     screen.blit(player_img[player_id], (player_x * cell_size, player_y * cell_size))
     player_id = (player_id + 1) % len(player_img)
 
+    if key_exists and (player_x, player_y) == door_position:
+        running = False
+
     # Оновлюємо екран
     pygame.display.flip()
     clock.tick(fps)
