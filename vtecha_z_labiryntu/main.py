@@ -3,6 +3,7 @@ import random
 
 
 pygame.init()
+pygame.mixer.init()
 
 # Створення вікна гри
 screen = pygame.display.set_mode((800, 600))
@@ -11,6 +12,16 @@ pygame.display.set_caption('Втеча з лабіринту')
 # Фоновий колір
 background_color = (0, 0, 0)  # Чорний колір фону
 cell_size = 40
+
+pygame.mixer.music.load("assets/background.mp3")
+pygame.mixer.music.set_volume(1.0)
+pygame.mixer.music.play(-1)
+
+sound_key = pygame.mixer.Sound("assets/sound_key.mp3")
+sound_key.set_volume(1.0)
+
+sound_door = pygame.mixer.Sound("assets/sound_door.mp3")
+sound_door.set_volume(1.0)
 
 wall_img = pygame.image.load("assets/wall.jpg")
 wall_img = pygame.transform.scale(wall_img, (cell_size, cell_size))
@@ -24,6 +35,61 @@ door_img = pygame.transform.scale(door_img, (cell_size, cell_size))
 player_img = [pygame.image.load(f"assets/player{i}.png") for i in range(1, 5)]
 player_img = [pygame.transform.scale(player, (cell_size, cell_size)) for player in player_img]
 player_id = 0
+
+background_img = pygame.image.load("assets/background.png")
+background_img = pygame.transform.scale(background_img, (800, 600))
+
+
+def draw_button(screen, text, color, x, y, w, h):
+    pygame.draw.rect(screen, color, pygame.Rect(x, y, w, h))
+    font = pygame.font.SysFont(None, 36)
+    text_surface = font.render(text, True, (255, 255, 255))
+    screen.blit(text_surface, (x + (w - text_surface.get_width()) / 2, y + (h - text_surface.get_height()) / 2))
+
+
+def main_menu():
+    menu_is_running = True
+    while menu_is_running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                menu_is_running = False
+                exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                x, y = event.pos
+                if 150 <= x <= 650 and 200 <= y <= 300:
+                    menu_is_running = False
+                elif 150 <= x <= 650 and 350 <= y <= 450:
+                    menu_is_running = False
+                    exit()
+        
+        screen.blit(background_img, (0, 0))
+        draw_button(screen, "Почати гру", (0, 150, 0), 150, 200, 500, 100)
+        draw_button(screen, "Вийти", (200, 0, 0), 150, 350, 500, 100)
+        pygame.display.flip()
+
+
+def win():
+    win = True
+    while win:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                win = False
+                exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                x, y = event.pos
+                if 150 <= x <= 650 and 200 <= y <= 300:
+                    win = False
+                elif 150 <= x <= 650 and 350 <= y <= 450:
+                    win = False
+                    exit()
+        
+        screen.blit(background_img, (0, 0))
+        draw_button(screen, "Вітаю! Ти пройшов гру!", (0,150,0), 150, 200, 500, 100)
+        draw_button(screen, "Вийти", (200,0,0), 150, 350, 500, 100)
+        pygame.display.flip()
+
+
+main_menu()
 
 maze = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -85,6 +151,7 @@ while running:
     if not key_exists:
         if (player_x, player_y) == key_position:
             key_exists = True
+            sound_key.play()
         else:
             screen.blit(key_img, (key_position[0] * cell_size, key_position[1] * cell_size))
 
@@ -94,9 +161,11 @@ while running:
 
     if key_exists and (player_x, player_y) == door_position:
         running = False
+        sound_door.play()
 
     # Оновлюємо екран
     pygame.display.flip()
     clock.tick(fps)
 
+win()
 pygame.quit()
