@@ -1,11 +1,10 @@
 import random
 
-# Розміри лабіринту (мають бути непарними)
+# Розміри лабіринту
 ROWS = 30
 COLS = 40
 
 def create_empty_maze(rows, cols):
-    # Створюємо сітку повністю зі стін
     maze = [[1 for _ in range(cols)] for _ in range(rows)]
     return maze
 
@@ -23,7 +22,7 @@ def dfs(x, y, maze, visited):
         nx, ny = x + dx, y + dy
         if is_in_bounds(nx, ny, len(maze), len(maze[0])) and not visited[nx][ny]:
             wall_x, wall_y = x + dx // 2, y + dy // 2
-            maze[wall_x][wall_y] = 0  # Ламаємо стіну
+            maze[wall_x][wall_y] = 0
             dfs(nx, ny, maze, visited)
 
 def generate_maze(rows, cols):
