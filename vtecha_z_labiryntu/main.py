@@ -1,6 +1,8 @@
 import pygame
 import random
 
+from maze_generator import generate_maze
+
 
 pygame.init()
 pygame.mixer.init()
@@ -8,10 +10,6 @@ pygame.mixer.init()
 # Створення вікна гри
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption('Втеча з лабіринту')
-
-# Фоновий колір
-background_color = (0, 0, 0)  # Чорний колір фону
-cell_size = 40
 
 pygame.mixer.music.load("assets/background.mp3")
 pygame.mixer.music.set_volume(1.0)
@@ -22,25 +20,6 @@ sound_key.set_volume(1.0)
 
 sound_door = pygame.mixer.Sound("assets/sound_door.mp3")
 sound_door.set_volume(1.0)
-
-wall_img = pygame.image.load("assets/wall.jpg")
-wall_img = pygame.transform.scale(wall_img, (cell_size, cell_size))
-
-key_img = pygame.image.load("assets/key.png")
-key_img = pygame.transform.scale(key_img, (cell_size, cell_size))
-
-door_img = pygame.image.load("assets/door.png")
-door_img = pygame.transform.scale(door_img, (cell_size, cell_size))
-
-mark_img = pygame.image.load("assets/mark.png")
-mark_img = pygame.transform.scale(mark_img, (cell_size, cell_size))
-
-fog_img = pygame.image.load("assets/fog.png")
-fog_img = pygame.transform.scale(fog_img, (cell_size, cell_size))
-
-player_img = [pygame.image.load(f"assets/hero/frame_{i:0>2}_delay-0.05s.gif") for i in range(20)]
-player_img = [pygame.transform.scale(player, (cell_size, cell_size)) for player in player_img]
-player_id = 0
 
 background_img = pygame.image.load("assets/background.png")
 background_img = pygame.transform.scale(background_img, (800, 600))
@@ -97,25 +76,32 @@ def win():
 
 main_menu()
 
-maze = [
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1],
-    [1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1],
-    [1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
-    [1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
-    [1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1],
-    [1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-    [1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1],
-    [1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
-    [1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1],
-    [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-]
+maze = generate_maze(15, 20)
 height = len(maze)
 width = len(maze[0])
+
+# Фоновий колір
+background_color = (0, 0, 0)  # Чорний колір фону
+cell_size = min(600 // height, 800 // width)
+
+wall_img = pygame.image.load("assets/wall.jpg")
+wall_img = pygame.transform.scale(wall_img, (cell_size, cell_size))
+
+key_img = pygame.image.load("assets/key.png")
+key_img = pygame.transform.scale(key_img, (cell_size, cell_size))
+
+door_img = pygame.image.load("assets/door.png")
+door_img = pygame.transform.scale(door_img, (cell_size, cell_size))
+
+mark_img = pygame.image.load("assets/mark.png")
+mark_img = pygame.transform.scale(mark_img, (cell_size, cell_size))
+
+fog_img = pygame.image.load("assets/fog.png")
+fog_img = pygame.transform.scale(fog_img, (cell_size, cell_size))
+
+player_img = [pygame.image.load(f"assets/hero/frame_{i:0>2}_delay-0.05s.gif") for i in range(20)]
+player_img = [pygame.transform.scale(player, (cell_size, cell_size)) for player in player_img]
+player_id = 0
 
 free_cells = []
 for y in range(height):
