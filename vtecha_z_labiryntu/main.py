@@ -42,6 +42,9 @@ background_img = pygame.transform.scale(background_img, (800, 600))
 mark_img = pygame.image.load("assets/mark.png")
 mark_img = pygame.transform.scale(mark_img, (cell_size, cell_size))
 
+fog_img = pygame.image.load("assets/fog.png")
+fog_img = pygame.transform.scale(fog_img, (cell_size, cell_size))
+
 
 def draw_button(screen, text, color, x, y, w, h):
     pygame.draw.rect(screen, color, pygame.Rect(x, y, w, h))
@@ -126,6 +129,8 @@ player_x, player_y = free_cells[0]
 key_exists = False
 
 marked_cells = set()
+visible_cells = set()
+visible_radius = 2
 
 clock = pygame.time.Clock()
 fps = 30
@@ -154,6 +159,11 @@ while running:
     # Заповнюємо екран фоном
     screen.fill(background_color)
 
+    # visible_cells.clear()
+    for y in range(player_y - visible_radius, player_y + visible_radius + 1):
+        for x in range(player_x - visible_radius, player_x + visible_radius + 1):
+            visible_cells.add((x, y))
+
     for y in range(height):
         for x in range(width):
             if maze[y][x] == 1:
@@ -172,6 +182,11 @@ while running:
     screen.blit(door_img, (door_position[0] * cell_size, door_position[1] * cell_size))
     screen.blit(player_img[player_id], (player_x * cell_size, player_y * cell_size))
     player_id = (player_id + 1) % len(player_img)
+
+    for y in range(height):
+        for x in range(width):
+            if (x, y) not in visible_cells:
+                screen.blit(fog_img, (x * cell_size, y * cell_size))
 
     if key_exists and (player_x, player_y) == door_position:
         running = False
