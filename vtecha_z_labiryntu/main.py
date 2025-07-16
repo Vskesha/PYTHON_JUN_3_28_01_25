@@ -76,7 +76,12 @@ def win():
 
 main_menu()
 
+running = True
+
 for level in range(1, 11):
+    if not running:
+        break
+    
     maze_height = level * 3 + 12
     maze = generate_maze(maze_height, maze_height * 4 // 3)
     height = len(maze)
@@ -124,7 +129,6 @@ for level in range(1, 11):
     clock = pygame.time.Clock()
     fps = 30
 
-    running = True
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
