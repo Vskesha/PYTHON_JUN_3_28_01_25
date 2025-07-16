@@ -32,7 +32,7 @@ key_img = pygame.transform.scale(key_img, (cell_size, cell_size))
 door_img = pygame.image.load("assets/door.png")
 door_img = pygame.transform.scale(door_img, (cell_size, cell_size))
 
-player_img = [pygame.image.load(f"assets/player{i}.png") for i in range(1, 5)]
+player_img = [pygame.image.load(f"assets/hero/frame_{i:0>2}_delay-0.05s.gif") for i in range(20)]
 player_img = [pygame.transform.scale(player, (cell_size, cell_size)) for player in player_img]
 player_id = 0
 
@@ -123,7 +123,7 @@ player_x, player_y = free_cells[0]
 key_exists = False
 
 clock = pygame.time.Clock()
-fps = 15
+fps = 30
 
 running = True
 while running:
