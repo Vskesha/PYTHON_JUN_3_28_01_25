@@ -32,6 +32,9 @@ key_img = pygame.transform.scale(key_img, (cell_size, cell_size))
 door_img = pygame.image.load("assets/door.png")
 door_img = pygame.transform.scale(door_img, (cell_size, cell_size))
 
+mark_img = pygame.image.load("assets/mark.png")
+mark_img = pygame.transform.scale(mark_img, (cell_size, cell_size))
+
 player_img = [pygame.image.load(f"assets/hero/frame_{i:0>2}_delay-0.05s.gif") for i in range(20)]
 player_img = [pygame.transform.scale(player, (cell_size, cell_size)) for player in player_img]
 player_id = 0
@@ -122,6 +125,8 @@ door_position = free_cells[-1]
 player_x, player_y = free_cells[0]
 key_exists = False
 
+marked_cells = set()
+
 clock = pygame.time.Clock()
 fps = 30
 
@@ -139,6 +144,12 @@ while running:
                 player_y -= 1
             if event.key == pygame.K_DOWN and player_y < height - 1 and maze[player_y + 1][player_x] == 0:
                 player_y += 1
+            if event.key == pygame.K_SPACE:
+                player_position = (player_x, player_y)
+                if player_position in marked_cells:
+                    marked_cells.remove(player_position)
+                else:
+                    marked_cells.add(player_position)
 
     # Заповнюємо екран фоном
     screen.fill(background_color)
@@ -147,6 +158,9 @@ while running:
         for x in range(width):
             if maze[y][x] == 1:
                 screen.blit(wall_img, (x * cell_size, y * cell_size))
+
+    for x, y in marked_cells:
+        screen.blit(mark_img, (x * cell_size, y * cell_size))
 
     if not key_exists:
         if (player_x, player_y) == key_position:
