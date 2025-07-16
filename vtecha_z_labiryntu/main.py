@@ -39,6 +39,9 @@ player_id = 0
 background_img = pygame.image.load("assets/background.png")
 background_img = pygame.transform.scale(background_img, (800, 600))
 
+mark_img = pygame.image.load("assets/mark.png")
+mark_img = pygame.transform.scale(mark_img, (cell_size, cell_size))
+
 
 def draw_button(screen, text, color, x, y, w, h):
     pygame.draw.rect(screen, color, pygame.Rect(x, y, w, h))
@@ -122,6 +125,8 @@ door_position = free_cells[-1]
 player_x, player_y = free_cells[0]
 key_exists = False
 
+marked_cells = set()
+
 clock = pygame.time.Clock()
 fps = 30
 
@@ -139,6 +144,12 @@ while running:
                 player_y -= 1
             if event.key == pygame.K_DOWN and player_y < height - 1 and maze[player_y + 1][player_x] == 0:
                 player_y += 1
+            if event.key == pygame.K_SPACE:
+                player_position = (player_x, player_y)
+                if player_position in marked_cells:
+                    marked_cells.remove(player_position)
+                else:
+                    marked_cells.add(player_position)
 
     # Заповнюємо екран фоном
     screen.fill(background_color)
@@ -147,6 +158,9 @@ while running:
         for x in range(width):
             if maze[y][x] == 1:
                 screen.blit(wall_img, (x * cell_size, y * cell_size))
+
+    for x, y in marked_cells:
+        screen.blit(mark_img, (x * cell_size, y * cell_size))
 
     if not key_exists:
         if (player_x, player_y) == key_position:
